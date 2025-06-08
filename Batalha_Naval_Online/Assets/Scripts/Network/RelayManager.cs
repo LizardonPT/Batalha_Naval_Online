@@ -26,7 +26,7 @@ public class RelayManager : MonoBehaviour
                 allocation.AllocationIdBytes,
                 allocation.Key,
                 allocation.ConnectionData,
-                "dtls"
+                (byte[])System.Text.Encoding.UTF8.GetBytes("dtls")
             );
 
             NetworkManager.Singleton.StartHost(); // Iniciar como host
@@ -39,4 +39,31 @@ public class RelayManager : MonoBehaviour
             return null;
         }
     }
+
+    public static async Task JoinRelay(string joinCode)
+{
+    try
+    {
+        JoinAllocation allocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
+        Debug.Log("Ligado ao Relay com o código: " + joinCode);
+
+        UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
+
+        transport.SetRelayServerData(
+            allocation.RelayServer.IpV4,
+            (ushort)allocation.RelayServer.Port,
+            allocation.AllocationIdBytes,
+            allocation.Key,
+            allocation.ConnectionData,
+            allocation.HostConnectionData, // apenas no join
+            true 
+        );
+
+        NetworkManager.Singleton.StartClient(); // Iniciar como client
+    }
+    catch (RelayServiceException e)
+    {
+        Debug.LogError("Erro ao ligar ao Relay: " + e);
+    }
+}
 }
