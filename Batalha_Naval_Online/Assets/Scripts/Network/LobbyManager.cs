@@ -16,6 +16,7 @@ public class LobbyManager : MonoBehaviour
 
         try
         {
+            Debug.Log(RelayManager.joinCode);
             CreateLobbyOptions options = new CreateLobbyOptions
             {
                 IsPrivate = false,

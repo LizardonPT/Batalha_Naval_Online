@@ -4,18 +4,19 @@ using UnityEngine.Tilemaps;
 
 public class GridManager : MonoBehaviour
 {
+    public static GridManager Instance;
     [SerializeField] private int gridWidth, gridHeight;
     [SerializeField] private Tile tilePrefab;
     [SerializeField] private Transform cameraPosition;
 
     private Dictionary<Vector2, Tile> gridTiles;
 
-    void Start()
+    void Awake()
     {
-        GenerateGrid();
+        Instance = this;
     }
 
-    void GenerateGrid()
+    internal void GenerateGrid()
     {
         gridTiles = new Dictionary<Vector2, Tile>();
 
@@ -26,7 +27,7 @@ public class GridManager : MonoBehaviour
                 var spawnTile = Instantiate(tilePrefab, new Vector3(x, y, 0), Quaternion.identity);
                 spawnTile.name = $"Tile_{x}_{y}";
 
-                var isOffset = (x % 2 == 0 && y % 2 != 0) || (x % 2 != 0 && y % 2 == 0);
+                var isOffset = (x + y) % 2 == 1;
                 spawnTile.Initialize(isOffset);
 
                 gridTiles[new Vector2(x, y)] = spawnTile;

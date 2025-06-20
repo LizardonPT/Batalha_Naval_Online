@@ -2,6 +2,7 @@ using UnityEngine;
 using PlayFab;
 using PlayFab.ClientModels;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class LoginScript : MonoBehaviour
 {
@@ -33,6 +34,7 @@ public class LoginScript : MonoBehaviour
     private void OnLoginSuccess(LoginResult result)
     {
         statusText.text = "Login successful!";
+        SceneManager.LoadScene("LobbyScene");
         // Proceed to the next scene or functionality
         Debug.Log("Login successful: " + result.PlayFabId);
     }

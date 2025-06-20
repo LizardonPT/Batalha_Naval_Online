@@ -9,11 +9,17 @@ public class RelayManager : MonoBehaviour
 {
     public static string joinCode; // Código partilhado com outros jogadores
 
+    void Start()
+    {
+        //Inicializar o NetworkManager
+        
+    }
+
     public static async Task<string> CreateRelay()
     {
         try
         {
-            Allocation allocation = await RelayService.Instance.CreateAllocationAsync(1); // max 1 client
+            Allocation allocation = await RelayService.Instance.CreateAllocationAsync(2); // cliente e host
 
             joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
             Debug.Log("Relay Join Code: " + joinCode);
@@ -25,8 +31,7 @@ public class RelayManager : MonoBehaviour
                 (ushort)allocation.RelayServer.Port,
                 allocation.AllocationIdBytes,
                 allocation.Key,
-                allocation.ConnectionData,
-                (byte[])System.Text.Encoding.UTF8.GetBytes("dtls")
+                allocation.ConnectionData
             );
 
             NetworkManager.Singleton.StartHost(); // Iniciar como host
@@ -55,8 +60,7 @@ public class RelayManager : MonoBehaviour
             allocation.AllocationIdBytes,
             allocation.Key,
             allocation.ConnectionData,
-            allocation.HostConnectionData, // apenas no join
-            true 
+            allocation.HostConnectionData // apenas no join
         );
 
         NetworkManager.Singleton.StartClient(); // Iniciar como client

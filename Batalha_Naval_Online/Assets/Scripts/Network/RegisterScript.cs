@@ -2,6 +2,7 @@ using UnityEngine;
 using PlayFab;
 using PlayFab.ClientModels;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class RegisterScript : MonoBehaviour
 {
@@ -39,6 +40,7 @@ public class RegisterScript : MonoBehaviour
         statusText.text = "Registration successful!";
         Debug.Log("Registration successful: " + result.PlayFabId);
         // Optionally, can redirect to the login screen or main menu
+        SceneManager.LoadScene("LobbyScene");
     }
 
     private void OnRegisterFailure(PlayFabError error)
